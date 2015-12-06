@@ -11,7 +11,7 @@ var encode = function (val, settings) {
 	// 传参检索及初始默认值
 	settings = retrieval(settings, arguments.length);
 
-	// 返回解码值
+	// 返回编码值
 	val = eneach(val, settings.key.entable);
 
 	// 输出为数组或字符格式
