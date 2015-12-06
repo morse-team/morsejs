@@ -8,7 +8,40 @@
 	<input type="text" class="morser-input">
 	<input type="text" class="morser-output">
 	<button class="morser-po"></button>
-	<script type="text/javascript" src="./index.js"></script>
+	<script type="text/javascript" src="./keymap.js"></script>
+	<script type="text/javascript" src="./morser.js"></script>
+	<script type="text/javascript">
 
+		var encodeDemo = encode('morse');
+
+		var encodeDemo2 = encode('morse', {
+			separator: '/',
+			isArray: true,
+			key: keyMap
+		});
+
+		var encodeDemo3 = encode('morse', '|');
+
+		var decodeDemo = decode('--/---/.-./.../.');
+
+		var decodeDemo2 = decode('--/---/.-./.../.', {
+			separator: '/',
+			key: keyMap
+		})
+
+		var decodeDemo3 = decode(['--', '---', '.-.', '...', '.']);
+		
+		var decodeDemo4 = decode('--|---|.-.|...|.', '|');
+
+
+		console.log(encodeDemo);
+		console.log(encodeDemo2);
+		console.log(encodeDemo3);
+		console.log(decodeDemo);
+		console.log(decodeDemo2);
+		console.log(decodeDemo3);
+		console.log(decodeDemo4);
+
+	</script>
 </body>
 </html>
