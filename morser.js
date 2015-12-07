@@ -52,7 +52,6 @@ morse.decode = function (word, settings) {
 // 返回解码值－处理函数
 function deeach  (word, keymap) {
 
-
 	// 定义存放解码值
 	var content = '';
 
@@ -115,20 +114,6 @@ function retrieval(word, settings) {
 	$.extend(defaultSettings, settings)
 	return defaultSettings
 
-	// // 定义对象放入参数
-	// var parameter = {};
-
-	// // 判断传入参数数量
-	// if (argumentsLenght < 2) {
-	// 	parameter.separator = '/';
-	// 	parameter.key = keymap();
-	// 	parameter.isArray = false;
-	// } else {
-	// 	parameter.separator = typeof settings == 'object' ? settings.separator || '/' : settings;
-	// 	parameter.key = settings.key || keymap();
-	// 	parameter.isArray = settings.isArray || false;
-	// }
-	// return parameter;
 }
 
 
