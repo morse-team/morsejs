@@ -6,19 +6,21 @@
 // settings.isArray 	输出摩斯值是否数组格式
 // settings.separator 	输出摩斯值分隔符
 
-var encode = function (val, settings) {
+var morse = {};
+
+morse.encode = function (word, settings) {
 
 	// 传参检索及初始默认值
-	settings = retrieval(settings, arguments.length);
+	settings = retrieval(word, settings);
 
 	// 返回编码值
-	val = eneach(val, settings.key.entable);
+	settings.word = eneach(settings.word, settings.key.entable);
 
 	// 输出为数组或字符格式
 	if (settings.isArray == true) {
-		return val
+		return settings.word
 	} else {
-		return val.join(settings.separator);
+		return settings.word.join(settings.separator);
 	}
 }
 
@@ -30,33 +32,35 @@ var encode = function (val, settings) {
 // settings.key 		为传入密文表
 // settings.separator 	确定摩斯值分隔符
 
-var decode = function (val, settings) {
+morse.decode = function (word, settings) {
 
 	// 传参检索及初始默认值
-	settings = retrieval(settings, arguments.length);
+	settings = retrieval(word, settings);
+
+	
 
 	// val强制转换为数组
-	val = isArray2(val) == true ? val : val.split(settings.separator);
+	settings.word = isArray2(settings.word) == true ? settings.word : settings.word.split(settings.separator);
 
 	// 返回解码值
-	val = deeach(val, settings.key.detable);
+	settings.word = deeach(settings.word, settings.key.detable);
 
-	return val;
+	return settings.word;
 }
 
 
 // 返回解码值－处理函数
-function deeach (val, keymap) {
+function deeach  (word, keymap) {
+
 
 	// 定义存放解码值
 	var content = '';
 
 	// 遍历键入值数组
-	for (var i = 0; i < val.length; i++) {
-
+	for (var i = 0; i < word.length; i++) {
 		// 遍历密文表返回解码值
 		for (var j in keymap) {
-			if(keymap[j].keyval === val[i]) {
+			if(keymap[j].keyval === word[i]) {
 				content += keymap[j].val;
 			}
 		} 
@@ -66,20 +70,21 @@ function deeach (val, keymap) {
 
 
 // 返回编码值－处理函数
-function eneach (val, keymap) {
+function eneach (word, keymap) {
 
 	// 定义存放编码数组
 	var content = [];
 
 	// 压缩键入值空格且转换为大写
-	val = trim(val).toUpperCase();
+	word = trim(word).toUpperCase();
+
 
 	// 遍历键入值字符串
-	for (var i = 0; i < val.length; i++) {
+	for (var i = 0; i < word.length; i++) {
 
 		// 遍历密文表返回编码值
 		for (var j in keymap) {
-			if(keymap[j].keyval === val.substr(i, 1)) {
+			if(keymap[j].keyval === word.substr(i, 1)) {
 				content[i] = keymap[j].val;
 			}
 		} 
@@ -89,22 +94,41 @@ function eneach (val, keymap) {
 
 
 // 传参检索－处理函数
-function retrieval(settings, argumentsLenght) {
+function retrieval(word, settings) {
 
-	// 定义对象放入参数
-	var parameter = {};
-
-	// 判断传入参数数量
-	if (argumentsLenght < 2) {
-		parameter.separator = '/';
-		parameter.key = keymap();
-		parameter.isArray = false;
+	// 判断settings是否存在且word传入settings新象中
+	if (typeof settings == 'object') {
+			settings.word = word;
 	} else {
-		parameter.separator = typeof settings == 'object' ? settings.separator || '/' : settings;
-		parameter.key = settings.key || keymap();
-		parameter.isArray = settings.isArray || false;
+		settings = {
+			word: word,
+			separator: settings
+		}
 	}
-	return parameter;
+
+	// 设置默认参数
+	var defaultSettings = {
+		key: keymap(),
+		separator: '/',
+		isArray: false
+	}
+	$.extend(defaultSettings, settings)
+	return defaultSettings
+
+	// // 定义对象放入参数
+	// var parameter = {};
+
+	// // 判断传入参数数量
+	// if (argumentsLenght < 2) {
+	// 	parameter.separator = '/';
+	// 	parameter.key = keymap();
+	// 	parameter.isArray = false;
+	// } else {
+	// 	parameter.separator = typeof settings == 'object' ? settings.separator || '/' : settings;
+	// 	parameter.key = settings.key || keymap();
+	// 	parameter.isArray = settings.isArray || false;
+	// }
+	// return parameter;
 }
 
 
@@ -154,7 +178,7 @@ function keymap () {
 	}
 }*/
 
-	var keymap ={entable:[{val : '.-',keyval: 'A',},{val: '-..',keyval: 'B',},{val: '-.-.',keyval: 'C',},{val: '-..',keyval: 'D',},{val: '.',keyval: 'E',},{val: '..-.',keyval: 'F',},{val: '--.',keyval: 'G',},{val: '....',keyval: 'H',},{val: '..',keyval: 'I',},{val: '.---',keyval: 'J',},{val: '-.-',keyval: 'K',},{val: '.-..',keyval: 'L',},{val: '--',keyval: 'M',},{val: '-.',keyval: 'N',},{val: '---',keyval: 'O',},{val: '.--.',keyval: 'P',},{val: '--.-',keyval: 'Q',},{val: '.-.',keyval: 'R',},{val: '...',keyval: 'S',},{val: '-',keyval: 'T',},{val: '..-',keyval: 'U',},{val: '...-',keyval: 'V',},{val: '.--',keyval: 'W',},{val: '-..-',keyval: 'X',},{val: '-.--',keyval: 'Y',},{val: '--..',keyval: 'Z',}]}
+var keymap ={entable:[{val : '.-',keyval: 'A',},{val: '-..',keyval: 'B',},{val: '-.-.',keyval: 'C',},{val: '-..',keyval: 'D',},{val: '.',keyval: 'E',},{val: '..-.',keyval: 'F',},{val: '--.',keyval: 'G',},{val: '....',keyval: 'H',},{val: '..',keyval: 'I',},{val: '.---',keyval: 'J',},{val: '-.-',keyval: 'K',},{val: '.-..',keyval: 'L',},{val: '--',keyval: 'M',},{val: '-.',keyval: 'N',},{val: '---',keyval: 'O',},{val: '.--.',keyval: 'P',},{val: '--.-',keyval: 'Q',},{val: '.-.',keyval: 'R',},{val: '...',keyval: 'S',},{val: '-',keyval: 'T',},{val: '..-',keyval: 'U',},{val: '...-',keyval: 'V',},{val: '.--',keyval: 'W',},{val: '-..-',keyval: 'X',},{val: '-.--',keyval: 'Y',},{val: '--..',keyval: 'Z',}]}
 
 	// 生成解码表
 	function decryption (table, totable) {
@@ -169,6 +193,6 @@ function keymap () {
 
 	decryption(keymap, keymap.entable);
 
-return keymap
+	return keymap
 }
 
