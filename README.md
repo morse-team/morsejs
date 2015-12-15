@@ -9,7 +9,7 @@ morse.encode(word, [settings])
 >类型：[String]()    
 为键入被编译的字符    
 + **settings**    
->类型：[Object]() or [String]()    
+	>类型：[Object]() or [String]()    
 - 组包含编译摩尔设置集合。支持的设置:
 	- **separator**    
 	>类型：[String]()   
