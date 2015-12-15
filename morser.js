@@ -1,89 +1,54 @@
-// 功能：摩斯编码
-// 参数：val为键入值
-
-// settings编码设置
-// settings.key 		为传入密文表
-// settings.isArray 	输出摩斯值是否数组格式
-// settings.separator 	输出摩斯值分隔符
-
 var morse = {};
 
+// 功能：摩斯编码
 morse.encode = function (word, settings) {
 
 	// 传参检索及初始默认值
 	settings = retrieval(word, settings);
 
 	// 返回编码值
-	settings.word = eneach(settings.word, settings.key.entable);
+	settings.word = getcode(settings.word, settings.key.entable, true);
 
 	// 输出为数组或字符格式
-	if (settings.isArray == true) {
-		return settings.word
-	} else {
-		return settings.word.join(settings.separator);
-	}
+	settings.word = settings.isArray == true ? settings.word : settings.word.join(settings.separator);
+
+	return settings.word
 }
 
 
 // 功能：摩斯解码
-// 参数：val为键入值
-
-// settings编码设置
-// settings.key 		为传入密文表
-// settings.separator 	确定摩斯值分隔符
-
 morse.decode = function (word, settings) {
 
 	// 传参检索及初始默认值
 	settings = retrieval(word, settings);
 
-	
-
-	// val强制转换为数组
+	// 判断如果为字符强制转换为数组
 	settings.word = isArray2(settings.word) == true ? settings.word : settings.word.split(settings.separator);
 
 	// 返回解码值
-	settings.word = deeach(settings.word, settings.key.detable);
+	settings.word = getcode(settings.word, settings.key.detable, false).join("");
 
 	return settings.word;
 }
 
 
-// 返回解码值－处理函数
-function deeach  (word, keymap) {
+// 解码器－处理函数
+function getcode (word, keymap, state) {
 
-	// 定义存放解码值
-	var content = '';
-
-	// 遍历键入值数组
-	for (var i = 0; i < word.length; i++) {
-		// 遍历密文表返回解码值
-		for (var j in keymap) {
-			if(keymap[j].keyval === word[i]) {
-				content += keymap[j].val;
-			}
-		} 
-	}
-	return content;
-}
-
-
-// 返回编码值－处理函数
-function eneach (word, keymap) {
-
-	// 定义存放编码数组
+	// 定义存放值的数组
 	var content = [];
 
-	// 压缩键入值空格且转换为大写
-	word = trim(word).toUpperCase();
+	// 判断为编码则转换为数组
+	if(state == true) {
+		var word = trim(word).toUpperCase().split("");
+	}
 
-
-	// 遍历键入值字符串
+	// 遍历word
 	for (var i = 0; i < word.length; i++) {
 
-		// 遍历密文表返回编码值
+		// 遍历密文表返回对应值
 		for (var j in keymap) {
-			if(keymap[j].keyval === word.substr(i, 1)) {
+			if(keymap[j].keyval === word[i]) {
 				content[i] = keymap[j].val;
 			}
 		} 
@@ -93,7 +58,7 @@ function eneach (word, keymap) {
 
 
 // 传参检索－处理函数
-function retrieval(word, settings) {
+function retrieval (word, settings) {
 
 	// 判断settings是否存在且word传入settings新象中
 	if (typeof settings == 'object') {
@@ -111,8 +76,36 @@ function retrieval(word, settings) {
 		separator: '/',
 		isArray: false
 	}
-	$.extend(defaultSettings, settings)
+
+	// 扩展对象
+	extend(defaultSettings, settings)
+
 	return defaultSettings
+}
+
+// 对象扩展
+function extend () {
+	var options, name,
+		i = 1,
+		length = arguments.length,
+		arger = arguments[0];
+
+	// 循环传入对象
+	for ( ; i < length; i++ ) {
+		options = arguments[i];
+
+		// 遍历传入对象属性
+		for (name in options) {
+
+			// 传入对象属性值未定义则结束此次循环
+			if (typeof options[name] == 'undefined') {
+				continue;
+			}
+
+			// 传入对象复制到被扩展对象中
+			arger[name] = options[name];
+		} 
+	}
 
 }
 
