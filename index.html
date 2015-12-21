@@ -5,20 +5,14 @@
 	<title>Document</title>
 </head>
 <body>
-	<input type="text" class="morser-input">
-	<input type="text" class="morser-output">
-	<button class="morser-po"></button>
-	<script type="text/javascript" src="./jquery.js"></script>
-	<script type="text/javascript" src="./keymap.js"></script>
 	<script type="text/javascript" src="./morser.js"></script>
 	<script type="text/javascript">
-
 		var encodeDemo = morse.encode('morse');
 
 		var encodeDemo2 = morse.encode('morse', {
 			separator: '/',
 			isArray: true,
-			key: keyMap
+			key: morse.data
 		});
 
 		var encodeDemo3 = morse.encode('morse', '|');
@@ -27,13 +21,12 @@
 
 		var decodeDemo2 = morse.decode('--/---/.-./.../.', {
 			separator: '/',
-			key: keyMap
+			key: morse.data
 		})
 
 		var decodeDemo3 = morse.decode(['--', '---', '.-.', '...', '.']);
 		
 		var decodeDemo4 = morse.decode('--|---|.-.|...|.', '|');
-
 
 		console.log(encodeDemo);
 		console.log(encodeDemo2);

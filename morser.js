@@ -1,4 +1,9 @@
+;(function (window) {
+
 var morse = {};
+
+// 摩尔表生成
+morse.data = maptable();
 
 // 功能：摩斯编码
 morse.encode = function (word, settings) {
@@ -15,7 +20,6 @@ morse.encode = function (word, settings) {
 	return settings.word
 }
 
-
 // 功能：摩斯解码
 morse.decode = function (word, settings) {
 
@@ -31,27 +35,18 @@ morse.decode = function (word, settings) {
 	return settings.word;
 }
 
-
 // 解码器－处理函数
 function getcode (word, keymap, state) {
 
 	// 定义存放值的数组
 	var content = [];
 
-	// 判断为编码则转换为数组
-	if(state == true) {
-		var word = trim(word).toUpperCase().split("");
-	}
+	// word转换为数组
+	word = state == true ? trim(word).toUpperCase().split("") : word;
 
-	// 遍历word
-	for (var i = 0; i < word.length; i++) {
-
-		// 遍历密文表返回对应值
-		for (var j in keymap) {
-			if(keymap[j].keyval === word[i]) {
-				content[i] = keymap[j].val;
-			}
-		} 
+	// 匹配编码值
+	for (var key in word) {
+		content.push(keymap[word[key]])
 	}
 	return content;
 }
@@ -62,7 +57,7 @@ function retrieval (word, settings) {
 
 	// 判断settings是否存在且word传入settings新象中
 	if (typeof settings == 'object') {
-			settings.word = word;
+		settings.word = word;
 	} else {
 		settings = {
 			word: word,
@@ -72,7 +67,7 @@ function retrieval (word, settings) {
 
 	// 设置默认参数
 	var defaultSettings = {
-		key: keymap(),
+		key: morse.data,
 		separator: '/',
 		isArray: false
 	}
@@ -86,9 +81,9 @@ function retrieval (word, settings) {
 // 对象扩展
 function extend () {
 	var options, name,
-		i = 1,
-		length = arguments.length,
-		arger = arguments[0];
+	i = 1,
+	length = arguments.length,
+	arger = arguments[0];
 
 	// 循环传入对象
 	for ( ; i < length; i++ ) {
@@ -106,13 +101,9 @@ function extend () {
 			arger[name] = options[name];
 		} 
 	}
-
 }
 
-
-
 // 辅助处理函数
-
 // console.log()简写
 function log (val) {
 	return console.log(val);
@@ -129,48 +120,21 @@ function isArray2 (source)
 	return '[object Array]' == Object.prototype.toString.call(source);
 }
 
+// 摩斯编码表生成函数
+function maptable() {
+	var data={entable:{A:".-",B:"-..",C:"-.-.",D:"-..",E:".",F:"..-.",G:"--.",H:"....",I:"..",J:".---",K:"-.-",L:".-..",M:"--",N:"-.",O:"---",P:".--.",Q:"--.-",R:".-.",S:"...",T:"-",U:"..-",V:"...-",W:".--",X:"-..-",Y:"-.--",Z:"--.."},detable:{}};
 
-// 内置摩斯编码表
-function keymap () {
-
-//密文表数据结构
-// keymap.entable.keyval 	永远为键入值
-// keymay.entable.val 		永远为对应返回值
-
-/*keymap = {
-
-	编码表
-	entable: {
-		[
-			val: '..',
-			keyval: 'A'
-		]
-	},
-
-	解码表
-	detable: {
-		[
-			val: 'A',
-			keyval: '..'
-		]
+// 生成解码表
+	var t;
+	for (var i in data.entable) {
+		t = data.entable[i];
+		data.detable[t] = i;
 	}
-}*/
-
-var keymap ={entable:[{val : '.-',keyval: 'A',},{val: '-..',keyval: 'B',},{val: '-.-.',keyval: 'C',},{val: '-..',keyval: 'D',},{val: '.',keyval: 'E',},{val: '..-.',keyval: 'F',},{val: '--.',keyval: 'G',},{val: '....',keyval: 'H',},{val: '..',keyval: 'I',},{val: '.---',keyval: 'J',},{val: '-.-',keyval: 'K',},{val: '.-..',keyval: 'L',},{val: '--',keyval: 'M',},{val: '-.',keyval: 'N',},{val: '---',keyval: 'O',},{val: '.--.',keyval: 'P',},{val: '--.-',keyval: 'Q',},{val: '.-.',keyval: 'R',},{val: '...',keyval: 'S',},{val: '-',keyval: 'T',},{val: '..-',keyval: 'U',},{val: '...-',keyval: 'V',},{val: '.--',keyval: 'W',},{val: '-..-',keyval: 'X',},{val: '-.--',keyval: 'Y',},{val: '--..',keyval: 'Z',}]}
-
-	// 生成解码表
-	function decryption (table, totable) {
-		table.detable = [];
-		for (var i in totable) { 
-			table.detable[i] = {
-				val: totable[i].keyval,
-				keyval: totable[i].val,
-			}
-		}
-	}
-
-	decryption(keymap, keymap.entable);
-
-	return keymap
+	return data;
 }
+window.morse = morse;
+})(window)
+
+
+
 
